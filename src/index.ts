@@ -14,10 +14,12 @@ client.on("message", (message: Message) => {
   if (message.author.id !== client.user.id) {
     console.log(
       `Received ${chalk.green(message.cleanContent)}` +
-        `from ${chalk.green(message.author.username)}`
+        ` from ${chalk.green(message.author.username)}`
     );
 
-    message.channel.send(message.content);
+    message.channel.send(message.content, {
+      reply: message.author,
+    });
   }
 });
 
