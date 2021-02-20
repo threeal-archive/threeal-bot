@@ -15,6 +15,7 @@ Dotenv.config();
 
 const botToken = process.env.BOT_TOKEN;
 const dbUri = process.env.DB_URI;
+const debugServer = process.env.DEBUG_SERVER;
 
 const client = new Discord.Client();
 
@@ -23,7 +24,7 @@ client.login(botToken)
   .then(() => {
     console.log(`Bot logged in as ${Chalk.green(client.user.username)}!`);
 
-    initBehaviors(client);
+    initBehaviors(client, debugServer);
 
     console.debug(`Connecting to the database on ${Chalk.yellow(dbUri)}...`);
     Mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -32,6 +32,8 @@ Personal [Discord](https://discord.com/) bot using [Discord.js](https://discord.
 
 ## Usage
 
+- (Optional) set optional value in `.env` file as follows:
+  - `DEBUG_SERVER`, makes bot only able to interact on specific server.
 - Check code lint.
   ```bash
   $ yarn lint
