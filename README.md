@@ -29,6 +29,11 @@ Personal [Discord](https://discord.com/) bot using [Discord.js](https://discord.
   BOT_TOKEN=NzkyNzE1NDU0MTk2MDg4ODQy.X-hvzA.Ovy4MCQywSkoMRRclStW4xAYK7I
   ```
   > Replace the `BOT_TOKEN` value with the value of your bot's token.
+- Invite your bot to your server using the following link:
+  ```
+  https://discord.com/oauth2/authorize?client_id=123456789012345678&scope=bot
+  ```
+  > Replace the `123456789012345678` in `client_id` with your app's client id.
 
 ## Usage
 
