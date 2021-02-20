@@ -1,28 +1,43 @@
-import { initRobot } from "./robot";
-import { initStore } from "./store";
-import * as dotenv from "dotenv";
-import * as chalk from "chalk";
+import * as Discord from "discord.js";
+import * as Mongoose from "mongoose";
+import * as Dotenv from "dotenv";
+import * as Chalk from "chalk";
+import { initBehaviors } from "./behaviors";
 
-dotenv.config();
+Dotenv.config();
 
-function checkEnvVariable(variable: string) {
-  if (!process.env[variable]) {
-    console.error(`Please provide ${chalk.red(variable)} variable!`);
+["BOT_TOKEN", "DB_URI"].forEach(it => {
+  if (!process.env[it]) {
+    console.error(`Please provide ${Chalk.red(it)} variable!`);
     process.exit(1);
   }
-}
+});
 
-["BOT_TOKEN", "DB_URI"].forEach(it => checkEnvVariable(it));
+const botToken = process.env.BOT_TOKEN;
+const dbUri = process.env.DB_URI;
 
-initRobot(process.env.BOT_TOKEN)
+const client = new Discord.Client();
+
+console.debug(`Logging in the bot using token ${Chalk.yellow(botToken)}...`);
+client.login(botToken)
   .then(() => {
-    initStore(process.env.DB_URI)
+    console.log(`Bot logged in as ${Chalk.green(client.user.username)}!`);
+
+    initBehaviors(client);
+
+    console.debug(`Connecting to the database on ${Chalk.yellow(dbUri)}...`);
+    Mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
+      .then((res) => {
+        for (const connection of res.connections) {
+          console.log(`Connected to the database ${Chalk.green(connection.name)}!`);
+        }
+      })
       .catch((err: Error) => {
-        console.error(`Failed to initialize the store! ${chalk.red(err.message)}`);
+        console.error(`Failed to connect to the database! ${Chalk.red(err.message)}`);
         process.exit(1);
       });
   })
   .catch((err: Error) => {
-    console.error(`Failed to initialize the robot! ${chalk.red(err.message)}`);
+    console.error(`Failed to login the bot! ${Chalk.red(err.message)}`);
     process.exit(1);
   });
