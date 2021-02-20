@@ -1,32 +1,28 @@
-import * as discord from "discord.js";
+import { initRobot } from "./robot";
+import { initStore } from "./store";
 import * as dotenv from "dotenv";
 import * as chalk from "chalk";
-import { connectDatabase } from "./database";
 
 dotenv.config();
 
-const client: discord.Client = new discord.Client();
-
-client.once("ready", () => {
-  console.log(`Bot ${chalk.green(client.user.username)} is ready!`);
-
-  connectDatabase(process.env.DB_URI);
-});
-
-client.on("message", (message: discord.Message) => {
-  if (message.author.id !== client.user.id) {
-    console.log(
-      `Received ${chalk.green(message.cleanContent)}` +
-        ` from ${chalk.green(message.author.username)}`
-    );
-
-    message.channel.send(message.content, {
-      reply: message.author,
-    });
+function checkEnvVariable(variable: string) {
+  if (!process.env[variable]) {
+    console.error(`Please provide ${chalk.red(variable)} variable!`);
+    process.exit(1);
   }
-});
+}
 
-console.log(`Login using token ${chalk.green(process.env.BOT_TOKEN)}`);
-client.login(process.env.BOT_TOKEN).catch((err: Error) => {
-  console.error(`Login failed! ${chalk.red(err.message)}`);
-});
+["BOT_TOKEN", "DB_URI"].forEach(it => checkEnvVariable(it));
+
+initRobot(process.env.BOT_TOKEN)
+  .then(() => {
+    initStore(process.env.DB_URI)
+      .catch((err: Error) => {
+        console.error(`Failed to initialize the store! ${chalk.red(err.message)}`);
+        process.exit(1);
+      });
+  })
+  .catch((err: Error) => {
+    console.error(`Failed to initialize the robot! ${chalk.red(err.message)}`);
+    process.exit(1);
+  });
