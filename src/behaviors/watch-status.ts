@@ -45,7 +45,10 @@ export async function initWatchStatus(
 
   client.on("presenceUpdate", async (_, presence: Discord.Presence) => {
     const userLatestStatus = await Status.getUserLatestStatus(presence.userID);
-    if (userLatestStatus.status != presence.status) {
+    if (
+      userLatestStatus === undefined ||
+      userLatestStatus.status != presence.status
+    ) {
       console.debug(
         `Updating new user status! ${Chalk.yellow(presence.user.username)}` +
           ` is ${Chalk.yellow(presence.status)}`

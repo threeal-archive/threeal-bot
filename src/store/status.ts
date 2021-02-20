@@ -76,16 +76,24 @@ export async function getAllUserLatestStatus(): Promise<UsersStatus> {
   const usersStatus: UsersStatus = {};
   for (const id in usersStatuses) {
     const statuses = usersStatuses[id];
-    usersStatus[id] = statuses[statuses.length - 1];
+    if (statuses.length > 0) {
+      usersStatus[id] = statuses[statuses.length - 1];
+    }
   }
 
   return usersStatus;
 }
 
-export async function getUserLatestStatus(userId: string): Promise<Status> {
+export async function getUserLatestStatus(
+  userId: string
+): Promise<Status | undefined> {
   const userStatuses = await getUserStatuses(userId);
 
-  return userStatuses[userStatuses.length - 1];
+  if (userStatuses.length > 0) {
+    return userStatuses[userStatuses.length - 1];
+  }
+
+  return undefined;
 }
 
 export async function updateUserStatus(
