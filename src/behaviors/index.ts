@@ -9,7 +9,7 @@ export function initBehaviors(
   client.once("ready", () => {
     initEchoMessage(client, debugServer);
 
-    client.guilds.cache.forEach((guild) => {
+    client.guilds.cache.forEach((guild: Discord.Guild) => {
       if (typeof debugServer === "string" && guild.name !== debugServer) {
         return;
       }

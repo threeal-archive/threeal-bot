@@ -5,14 +5,18 @@ Personal [Discord](https://discord.com/) bot using [Discord.js](https://discord.
 ## Project Setup
 
 - Install [Node.js](https://nodejs.org/en/) as in their [official guide](https://nodejs.org/en/download/).
-  > As an alternative, you may install Node.js using [NVM](https://github.com/nvm-sh/nvm).
-- Install [MongoDB](https://www.mongodb.com/) as in their [official guide](https://docs.mongodb.com/manual/installation/).
+  > As an alternative, you may deploy this project on cloud using [Heroku](https://www.heroku.com/home).
 - Install [Yarn](https://yarnpkg.com/) as in their [official guide](https://classic.yarnpkg.com/en/docs/install/).
   > If you don't want to use Yarn, you may skip this step and use [NPM](https://www.npmjs.com/) (the default of Node.js) instead.
 - Open this project directory in terminal, and initialize the dependencies.
   ```bash
   $ yarn install
   ```
+
+## Database Setup
+
+- Install [MongoDB](https://www.mongodb.com/) as in their [official guide](https://docs.mongodb.com/manual/installation/).
+  > As an alternative, you may setup the database on cloud using [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
 - Create a `.env` file in this project directory and fill the content as follows:
   ```
   DB_URI=mongodb://user:pass@localhost:27017/db
@@ -29,21 +33,19 @@ Personal [Discord](https://discord.com/) bot using [Discord.js](https://discord.
   BOT_TOKEN=NzkyNzE1NDU0MTk2MDg4ODQy.X-hvzA.Ovy4MCQywSkoMRRclStW4xAYK7I
   ```
   > Replace the `BOT_TOKEN` value with the value of your bot's token.
-- Invite your bot to your server using the following link:
-  ```
-  https://discord.com/oauth2/authorize?client_id=123456789012345678&scope=bot
-  ```
-  > Replace the `123456789012345678` in `client_id` with your app's client id.
 
 ## Usage
 
 - (Optional) set optional value in `.env` file as follows:
-  - `DEBUG_SERVER`, makes bot only able to interact on specific server.
-- Check code lint.
+  - `PORT`, fill it with the port of the HTTP server that will redirect to the bot invitation address.
+    If not provided, the HTTP server will be disabled.
+  - `DEBUG_SERVER`, fill it with a Discord server's name that the bot only able to interacts with for debug purposes.
+    If not provided, the bot will interact with all the Discord servers.
+- (Optional) modify the code in this project as you desire and then check the code lint.
   ```bash
   $ yarn lint
   ```
-- Start the bot.
+- Start the bot and test it on your Discord server.
   ```bash
   $ yarn start
   ```

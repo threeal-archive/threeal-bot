@@ -14,7 +14,7 @@ async function initUsersLatestStatuses(guild: Discord.Guild): Promise<void> {
   const usersLatestStatuses = await Status.getAllUserLatestStatus();
 
   // Update latest statuses from discord cache
-  guild.members.cache.forEach((member) => {
+  guild.members.cache.forEach((member: Discord.GuildMember) => {
     const user = member.user;
     if (user.id in usersLatestStatuses) {
       const status = usersLatestStatuses[user.id];
