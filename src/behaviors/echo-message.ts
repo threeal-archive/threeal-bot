@@ -24,5 +24,5 @@ export function initEchoMessage(
     }
   });
 
-  console.log(`${Chalk.green("Echo Message")} behavior initialized`);
+  console.log(`${Chalk.green("Echo Message")} behavior initialized!`);
 }

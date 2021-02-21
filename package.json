@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "ts-node ./src",
-    "lint": "eslint ./src/**/*"
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "@types/node": "^14.14.28",
