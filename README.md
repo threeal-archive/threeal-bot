@@ -43,10 +43,6 @@ Personal [Discord](https://discord.com/) bot using [Discord.js](https://discord.
   ```bash
   $ yarn lint
   ```
-- Compile from [TypeScript](https://www.typescriptlang.org/) to [JavaScript](https://www.javascript.com/).
-  ```bash
-  $ yarn build
-  ```
 - Start the bot.
   ```bash
   $ yarn start
