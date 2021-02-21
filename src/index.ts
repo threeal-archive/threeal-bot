@@ -1,23 +1,30 @@
+import * as Dotenv from "dotenv";
 import * as Discord from "discord.js";
 import * as Http from "http";
 import * as Mongoose from "mongoose";
-import * as Dotenv from "dotenv";
 import * as Chalk from "chalk";
+import * as Nlu from "./nlu";
 import { initBehaviors } from "./behaviors";
 
 Dotenv.config();
 
-["BOT_TOKEN", "DB_URI"].forEach((it) => {
-  if (!process.env[it]) {
-    console.error(`Please provide ${Chalk.red(it)} variable!`);
-    process.exit(1);
-  }
-});
+function errorUndefinedVar(variable: string): string {
+  console.error(`Please provide ${Chalk.red(variable)} variable!`);
+  process.exit(1);
+}
 
-const botToken = process.env.BOT_TOKEN;
-const dbUri = process.env.DB_URI;
-const port = process.env.PORT;
-const debugServer = process.env.DEBUG_SERVER;
+const botToken: string =
+  process.env.BOT_TOKEN || errorUndefinedVar("BOT_TOKEN");
+const dbUri: string = process.env.DB_URI || errorUndefinedVar("DB_URI");
+const nluUrl: string = process.env.NLU_URL || errorUndefinedVar("NLU_URI");
+const port: string | undefined = process.env.PORT;
+const debugServer: string | undefined = process.env.DEBUG_SERVER;
+
+function isDebugServer(serverName: string) {
+  if (debugServer === undefined || serverName !== debugServer) {
+    return false;
+  }
+}
 
 const client = new Discord.Client();
 
@@ -62,7 +69,21 @@ client
       console.log(`Connected to the database ${Chalk.green(connection.name)}!`);
     }
 
-    await initBehaviors(client, debugServer);
+    const nlu = new Nlu.Instance(nluUrl);
+
+    console.debug(`Connecting to the NLU server on ${Chalk.yellow(nluUrl)}...`);
+    const message = await nlu.init().catch((err: Error) => {
+      console.error(
+        `Failed to connect to the NLU server! ${Chalk.red(err.message)}`
+      );
+      process.exit(1);
+    });
+
+    console.log(
+      `Connected to the NLU server with response ${Chalk.green(message)}`
+    );
+
+    await initBehaviors(client, nlu, isDebugServer);
   })
   .login(botToken)
   .catch((err: Error) => {
