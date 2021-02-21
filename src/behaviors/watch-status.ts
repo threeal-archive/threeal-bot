@@ -10,7 +10,9 @@ async function updateUserStatus(userId: string, status: string) {
   });
 }
 
-async function initUsersLatestStatuses(guild: Discord.Guild): Promise<void> {
+async function initGuildMembersLatestStatuses(
+  guild: Discord.Guild
+): Promise<void> {
   const usersLatestStatuses = await Status.getAllUserLatestStatus();
 
   // Update latest statuses from discord cache
@@ -35,13 +37,14 @@ async function initUsersLatestStatuses(guild: Discord.Guild): Promise<void> {
   });
 }
 
-export async function initWatchStatus(
-  client: Discord.Client,
-  guild: Discord.Guild
-): Promise<void> {
+export async function initWatchStatus(client: Discord.Client): Promise<void> {
   console.debug(`Initializing ${Chalk.yellow("Watch Status")} behavior...`);
 
-  await initUsersLatestStatuses(guild);
+  await Promise.all(
+    client.guilds.cache.map(async (guild: Discord.Guild) => {
+      await initGuildMembersLatestStatuses(guild);
+    })
+  );
 
   client.on("presenceUpdate", async (_, presence: Discord.Presence) => {
     const userLatestStatus = await Status.getUserLatestStatus(presence.userID);
@@ -57,8 +60,5 @@ export async function initWatchStatus(
     }
   });
 
-  console.log(
-    `${Chalk.green("Watch Status")} behavior initialized` +
-      ` on ${Chalk.green(guild.name)}!`
-  );
+  console.log(`${Chalk.green("Watch Status")} behavior initialized!`);
 }
